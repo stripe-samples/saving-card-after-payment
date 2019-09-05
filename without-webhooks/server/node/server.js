@@ -2,12 +2,11 @@ const express = require("express");
 const app = express();
 const { resolve } = require("path");
 // Replace if using a different env file or config
-const ENV_PATH = "../../../.env";
-const envPath = resolve(ENV_PATH);
+const envPath = resolve(__dirname, "../../../.env");
 const env = require("dotenv").config({ path: envPath });
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const stripe = require("stripe")(env.parsed.STRIPE_SECRET_KEY);
 
-app.use(express.static(process.env.STATIC_DIR));
+app.use(express.static(env.parsed.STATIC_DIR));
 app.use(
   express.json({
     // We need the raw body to verify webhook signatures.
@@ -22,12 +21,12 @@ app.use(
 
 app.get("/", (req, res) => {
   // Display checkout page
-  const path = resolve(process.env.STATIC_DIR + "/index.html");
+  const path = resolve(env.parsed.STATIC_DIR + "/index.html");
   res.sendFile(path);
 });
 
 app.get("/stripe-key", (req, res) => {
-  res.send({ publicKey: process.env.STRIPE_PUBLIC_KEY });
+  res.send({ publicKey: env.parsed.STRIPE_PUBLIC_KEY });
 });
 
 const calculateOrderAmount = items => {
