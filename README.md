@@ -17,6 +17,16 @@ When saving a card you will want to consider how you intend to reuse the card fo
 
 Setting `setup_future_usage` to "off_session" will optimize for future off-session payments, while "on_session" will optimize for future on-session usage. If you plan on reusing the card for both on and off-session usage, set `setup_future_usage` to "off_session".
 
+**Demo**
+
+See the sample [live](https://c45nv.sse.codesandbox.io/) or [fork](https://codesandbox.io/s/saving-card-after-a-payment-c45nv) on CodeSandbox.
+
+The demo is running in test mode -- use `4242424242424242` as a test card number with any CVC + future expiration date.
+
+Use the `4000000000003220` test card number to trigger a 3D Secure challenge flow.
+
+Read more about testing on Stripe at https://stripe.com/docs/testing.
+
 <img src="./saving-card-after-payment.gif" alt="A checkout form with a checkbox to let you save a payment method" align="center">
 
 There are two implementations depending on whether you want to use webhooks for any post-payment process: 
