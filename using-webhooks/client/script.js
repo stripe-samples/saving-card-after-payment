@@ -86,7 +86,6 @@ var pay = function(stripe, card, clientSecret) {
   stripe
     .handleCardPayment(clientSecret, card, {
       payment_method_data: data,
-      save_payment_method: !!isSavingCard,
       setup_future_usage: isSavingCard ? "off_session" : ""
     })
     .then(function(result) {

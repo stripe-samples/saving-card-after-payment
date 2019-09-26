@@ -35,15 +35,10 @@ const calculateOrderAmount = items => {
 app.post("/create-payment-intent", async (req, res) => {
   const { items, currency } = req.body;
 
-  // You need a Customer to save a card
-  // Create or use a preexisting Customer
-  const customer = await stripe.customers.create();
-
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
     amount: calculateOrderAmount(items),
-    currency: currency,
-    customer: customer.id
+    currency: currency
   });
 
   // Send public key and PaymentIntent details to client
@@ -84,6 +79,16 @@ app.post("/webhook", async (req, res) => {
     // The PaymentMethod is attached with the client call to handleCardPayment
     console.log("❗ PaymentMethod successfully attached to Customer");
   } else if (eventType === "payment_intent.succeeded") {
+    if (data.object.setup_future_usage !== null) {
+      // You need a Customer to save a card
+      // Create or use a preexisting Customer
+      const customer = await stripe.customers.create({
+        payment_method: data.object.payment_method
+      });
+    } else {
+      console.log("❗ Customer did not want to save the card. ");
+    }
+
     // Funds have been captured
     // Fulfill any orders, e-mail receipts, etc
     // To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)

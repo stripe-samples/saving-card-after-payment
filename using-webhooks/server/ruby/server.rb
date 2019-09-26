@@ -28,15 +28,10 @@ post '/create-payment-intent' do
   content_type 'application/json'
   data = JSON.parse(request.body.read)
 
-  # You need a Customer to save a card
-  # Create or use a preexisting Customer
-  customer = Stripe::Customer.create
-
   # Create a PaymentIntent with the order amount and currency
   payment_intent = Stripe::PaymentIntent.create(
     amount: calculate_order_amount(data['items']),
-    currency: data['currency'],
-    customer: customer['id']
+    currency: data['currency']
   )
 
   # Send public key and PaymentIntent details to client
@@ -84,6 +79,14 @@ post '/webhook' do
     # The PaymentMethod is attached with the client call to handleCardPayment
     puts '❗ PaymentMethod successfully attached to Customer'
   elsif event_type == 'payment_intent.succeeded'
+    if !data_object['setup_future_usage'].nil?
+      # You need a Customer to save a card
+      # Create or use a preexisting Customer
+      customer = Stripe::Customer.create(payment_method: data_object['payment_method'])
+    else
+      puts '❗ Customer did not want to save the card.'
+    end
+
     puts '💰 Payment received!'
     # Fulfill any orders, e-mail receipts, etc
     # To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)

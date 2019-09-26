@@ -50,15 +50,10 @@ $app->post('/create-payment-intent', function (Request $request, Response $respo
     $pub_key = getenv('STRIPE_PUBLIC_KEY');
     $body = json_decode($request->getBody());
 
-    // You need a Customer to save a card
-    // Create or use a preexisting Customer
-    $customer = \Stripe\Customer::create();
-
     // Create a PaymentIntent with the order amount and currency
     $payment_intent = \Stripe\PaymentIntent::create([
       "amount" => calculateOrderAmount($body->items),
-      "currency" => $body->currency,
-      "customer" => $customer->id
+      "currency" => $body->currency
     ]);
     
     // Send public key and PaymentIntent details to client
@@ -90,6 +85,14 @@ $app->post('/webhook', function(Request $request, Response $response) {
       // The PaymentMethod is attached with the client call to handleCardPayment
       $logger->info('❗ PaymentMethod successfully attached to Customer');
     } else if ($type == 'payment_intent.succeeded') {
+      if($object->setup_future_usage != null) {
+        // You need a Customer to save a card
+        // Create or use a preexisting Customer
+        $customer = \Stripe\Customer::create(["payment_method" => $object->payment_method]);
+      } else {
+        $logger->info('❗ Customer did not want to save the card. ');
+      }
+
       // Fulfill any orders, e-mail receipts, etc
       // To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)
       $logger->info('💰 Payment received! ');

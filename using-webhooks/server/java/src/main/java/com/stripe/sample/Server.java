@@ -2,7 +2,6 @@ package com.stripe.sample;
 
 import java.nio.file.Paths;
 
-import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 import static spark.Spark.port;
@@ -74,13 +73,10 @@ public class Server {
         post("/create-payment-intent", (request, response) -> {
             response.type("application/json");
 
-            CustomerCreateParams customerCreateParams = new CustomerCreateParams.Builder().build();
-            Customer customer = Customer.create(customerCreateParams);
-
             CreatePaymentBody postBody = gson.fromJson(request.body(), CreatePaymentBody.class);
             PaymentIntentCreateParams createParams = new PaymentIntentCreateParams.Builder()
                     .setCurrency(postBody.getCurrency()).setAmount(new Long(calculateOrderAmount(postBody.getItems())))
-                    .setCustomer(customer.getId()).build();
+                    .build();
             // Create a PaymentIntent with the order amount and currency
             PaymentIntent intent = PaymentIntent.create(createParams);
             // Send public key and PaymentIntent details to client
@@ -103,22 +99,24 @@ public class Server {
                 return "";
             }
 
+            EventDataObjectDeserializer deserializer = event.getDataObjectDeserializer();
+
             switch (event.getType()) {
-            case "payment_intent.amount_capturable_updated":
-                EventDataObjectDeserializer deserializer = event.getDataObjectDeserializer();
-                PaymentIntent intent = ApiResource.GSON.fromJson(deserializer.getRawJson(), PaymentIntent.class);
-                System.out.println("❗Charging the card for:  " + Long.toString(intent.getAmountCapturable()));
-                // You can capture an amount less than or equal to the amount_capturable
-                // By default capture() will capture the full amount_capturable
-                // To cancel a payment before capturing use .cancel()
-                // (https://stripe.com/docs/api/payment_intents/cancel)
-                intent.capture();
+            case "payment_method.attached":
+                // The PaymentMethod is attached with the client call to handleCardPayment
+                System.out.println("❗ PaymentMethod successfully attached to Customer");
                 break;
             case "payment_intent.succeeded":
+                PaymentIntent intent = ApiResource.GSON.fromJson(deserializer.getRawJson(), PaymentIntent.class);
+
+                CustomerCreateParams customerCreateParams = new CustomerCreateParams.Builder()
+                        .setPaymentMethod(intent.getPaymentMethod()).build();
+                Customer customer = Customer.create(customerCreateParams);
+
                 // Fulfill any orders, e-mail receipts, etc
                 // To cancel the payment after capture you will need to issue a Refund
                 // (https://stripe.com/docs/api/refunds)
-                System.out.println("💰Payment received!");
+                System.out.println("💰 Payment received!");
                 break;
             case "payment_intent.payment_failed":
                 System.out.println("❌ Payment failed.");
@@ -132,5 +130,4 @@ public class Server {
             response.status(200);
             return "";
         });
-    }
-}
+}}
