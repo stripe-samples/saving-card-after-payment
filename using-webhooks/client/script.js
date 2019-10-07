@@ -98,18 +98,10 @@ var pay = function(stripe, card, clientSecret) {
         }, 4000);
       } else {
         orderComplete(clientSecret);
-        if (isSavingCard) {
-          fetch("/add-card-to-customer", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              paymentMethodId: result.paymentIntent.payment_method,
-              billingDetails: paymentIntent.billing_details
-            })
-          });
-        }
+        // There's a risk the customer will close the browser window before the callback executes
+        // Fulfill any business critical processes async using a 
+        // In this sample we use a webhook to listen to payment_intent.succeeded 
+        // and add the PaymentMethod to a Customer
       }
     });
 };
