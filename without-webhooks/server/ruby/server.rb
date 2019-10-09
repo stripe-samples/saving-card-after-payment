@@ -50,6 +50,9 @@ post '/pay' do
         # Create a Customer to store the PaymentMethod
         customer = Stripe::Customer.create
         payment_intent_data['customer'] = customer['id']
+        
+        # Set save_payment_method to true to attach the PM to the Customer
+        payment_intent_data['save_payment_method'] = True
 
         # setup_future_usage tells Stripe how you plan on using the saved card
         # set to 'off_session' if you plan on charging the saved card when the customer is not present
