@@ -53,7 +53,8 @@ $app->post('/create-payment-intent', function (Request $request, Response $respo
     // Create a PaymentIntent with the order amount and currency
     $payment_intent = \Stripe\PaymentIntent::create([
       "amount" => calculateOrderAmount($body->items),
-      "currency" => $body->currency
+      "currency" => $body->currency,
+      "setup_future_usage" => 'off_session'
     ]);
     
     // Send public key and PaymentIntent details to client
