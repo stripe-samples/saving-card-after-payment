@@ -44,8 +44,7 @@ def create_payment():
     # Create a PaymentIntent with the order amount and currency
     intent = stripe.PaymentIntent.create(
         amount=calculate_order_amount(data['items']),
-        currency=data['currency'],
-        setup_future_usage='off_session'
+        currency=data['currency']
     )
 
     try:

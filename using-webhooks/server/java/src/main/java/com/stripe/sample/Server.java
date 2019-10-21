@@ -76,7 +76,7 @@ public class Server {
             CreatePaymentBody postBody = gson.fromJson(request.body(), CreatePaymentBody.class);
             PaymentIntentCreateParams createParams = new PaymentIntentCreateParams.Builder()
                     .setCurrency(postBody.getCurrency()).setAmount(new Long(calculateOrderAmount(postBody.getItems())))
-                    .setSetupFutureUsage(PaymentIntentCreateParams.SetupFutureUsage.OFF_SESSION).build();
+                    .build();
             // Create a PaymentIntent with the order amount and currency
             PaymentIntent intent = PaymentIntent.create(createParams);
             // Send public key and PaymentIntent details to client
@@ -130,5 +130,4 @@ public class Server {
             response.status(200);
             return "";
         });
-    }
-}
+}}
