@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
 const { resolve } = require("path");
-// Replace if using a different env file or config
-const envPath = resolve(__dirname, "../../../.env");
-const env = require("dotenv").config({ path: envPath });
+// Copy the .env.example in the root into a .env file in this folder
+
+const env = require("dotenv").config({ path: "./.env" });
 const stripe = require("stripe")(env.parsed.STRIPE_SECRET_KEY);
 
 app.use(express.static(env.parsed.STATIC_DIR));
@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/stripe-key", (req, res) => {
-  res.send({ publicKey: env.parsed.STRIPE_PUBLIC_KEY });
+  res.send({ publicKey: env.parsed.STRIPE_PUBLISHABLE_KEY });
 });
 
 const calculateOrderAmount = items => {
