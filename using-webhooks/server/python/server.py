@@ -78,7 +78,7 @@ def webhook_received():
     data_object = data['object']
 
     if event_type == 'payment_method.attached':
-        # The PaymentMethod is attached with the client call to handleCardPayment
+        # The PaymentMethod is attached
         print(
             '❗ PaymentMethod successfully attached to Customer')
     elif event_type == 'payment_intent.succeeded':

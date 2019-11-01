@@ -80,7 +80,7 @@ $app->post('/webhook', function(Request $request, Response $response) {
     $object = $event['data']['object'];
     
     if ($type == 'payment_method.attached') {
-      // The PaymentMethod is attached with the client call to handleCardPayment
+      // The PaymentMethod is attached
       $logger->info('❗ PaymentMethod successfully attached to Customer');
     } else if ($type == 'payment_intent.succeeded') {
       if($object->setup_future_usage != null) {

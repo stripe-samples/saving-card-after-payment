@@ -76,7 +76,7 @@ post '/webhook' do
   data_object = data['object']
 
   if event_type == 'payment_method.attached'
-    # The PaymentMethod is attached with the client call to handleCardPayment
+    # The PaymentMethod is attached
     puts '❗ PaymentMethod successfully attached to Customer'
   elsif event_type == 'payment_intent.succeeded'
     if !data_object['setup_future_usage'].nil?

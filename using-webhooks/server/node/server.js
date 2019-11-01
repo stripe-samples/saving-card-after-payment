@@ -75,7 +75,7 @@ app.post("/webhook", async (req, res) => {
   }
 
   if (eventType === "payment_method.attached") {
-    // The PaymentMethod is attached with the client call to handleCardPayment
+    // The PaymentMethod is attached
     console.log("❗ PaymentMethod successfully attached to Customer");
   } else if (eventType === "payment_intent.succeeded") {
     if (data.object.setup_future_usage !== null) {

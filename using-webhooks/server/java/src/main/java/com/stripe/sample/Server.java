@@ -103,7 +103,7 @@ public class Server {
 
             switch (event.getType()) {
             case "payment_method.attached":
-                // The PaymentMethod is attached with the client call to handleCardPayment
+                // The PaymentMethod is attached with the client
                 System.out.println("❗ PaymentMethod successfully attached to Customer");
                 break;
             case "payment_intent.succeeded":
