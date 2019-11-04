@@ -61,7 +61,7 @@ var setupElements = function(data) {
 };
 
 /*
- * Calls stripe.handleCardPayment which creates a pop-up modal to
+ * Calls stripe.confirmCardPayment which creates a pop-up modal to
  * prompt the user to enter  extra authentication details without leaving your page
  */
 var pay = function(stripe, card, clientSecret) {
@@ -69,6 +69,7 @@ var pay = function(stripe, card, clientSecret) {
   var isSavingCard = document.querySelector("#save-card").checked;
 
   var data = {
+    card: card,
     billing_details: {}
   };
 
@@ -79,13 +80,13 @@ var pay = function(stripe, card, clientSecret) {
   changeLoadingState(true);
 
   // Initiate the payment.
-  // If authentication is required, handleCardPayment will automatically display a modal
+  // If authentication is required, confirmCardPayment will automatically display a modal
 
   // Use save_payment_method to indicate that you want to save the card
   // Use setup_future_usage to tell Stripe how you plan on charging the card
   stripe
-    .handleCardPayment(clientSecret, card, {
-      payment_method_data: data,
+    .confirmCardPayment(clientSecret, card, {
+      payment_method: data,
       setup_future_usage: isSavingCard ? "off_session" : ""
     })
     .then(function(result) {
