@@ -85,7 +85,7 @@ var pay = function(stripe, card, clientSecret) {
   // Use save_payment_method to indicate that you want to save the card
   // Use setup_future_usage to tell Stripe how you plan on charging the card
   stripe
-    .confirmCardPayment(clientSecret, card, {
+    .confirmCardPayment(clientSecret, {
       payment_method: data,
       setup_future_usage: isSavingCard ? "off_session" : ""
     })
