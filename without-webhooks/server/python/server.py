@@ -75,7 +75,7 @@ def pay():
             intent = stripe.PaymentIntent.confirm(data['paymentIntentId'])
         return generate_response(intent)
     except Exception as e:
-        return jsonify({'error': e})
+        return jsonify(error=str(e)), 403
 
 
 def generate_response(intent):
