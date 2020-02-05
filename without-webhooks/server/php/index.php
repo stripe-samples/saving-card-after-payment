@@ -94,10 +94,7 @@ $app->post('/pay', function(Request $request, Response $response) use ($app)  {
       $customer = \Stripe\Customer::create();
       $payment_intent_data['customer'] = $customer->id;
 
-      // Set save_payment_method to true to attach the PaymentMethod to the Customer
-      $payment_intent_data['save_payment_method'] = true;
-
-      // setup_future_usage tells Stripe how you plan on using the saved card
+      // setup_future_usage saves the card and tells Stripe how you plan to charge it in the future
       // set to 'off_session' if you plan on charging the saved card when your customer is not present
       $payment_intent_data['setup_future_usage'] = 'off_session';
     }
