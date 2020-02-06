@@ -35,9 +35,7 @@ app.post("/create-payment-intent", async (req, res) => {
   const { items, currency } = req.body;
 
   // Create or use a preexisting Customer to associate with the payment
-  const customer = await stripe.customers.create({
-    payment_method: data.object.payment_method
-  });
+  const customer = await stripe.customers.create();
 
   // Create a PaymentIntent with the order amount and currency and the customer id
   const paymentIntent = await stripe.paymentIntents.create({

@@ -42,7 +42,7 @@ def create_payment():
     data = json.loads(request.data)
 
     # Create or use a preexisting Customer to associate with the payment
-    customer = stripe.Customer.create
+    customer = stripe.Customer.create()
 
     # Create a PaymentIntent with the order amount and currency and the customer id
     intent = stripe.PaymentIntent.create(
@@ -86,7 +86,7 @@ def webhook_received():
         print(
             '❗ PaymentMethod successfully attached to Customer')
     elif event_type == 'payment_intent.succeeded':
-        if data_object['setup_future_usage'] = None:
+        if data_object['setup_future_usage'] == None:
             print('❗ Customer did not want to save the card.')
 
         print('💰 Payment received!')
