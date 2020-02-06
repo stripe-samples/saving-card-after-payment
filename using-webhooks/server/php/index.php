@@ -48,10 +48,14 @@ $app->post('/create-payment-intent', function (Request $request, Response $respo
     $pub_key = getenv('STRIPE_PUBLISHABLE_KEY');
     $body = json_decode($request->getBody());
 
-    // Create a PaymentIntent with the order amount and currency
+    // Create or use a preexisting Customer to associate with the payment
+    $customer = \Stripe\Customer::create();
+
+    // Create a PaymentIntent with the order amount and currency and the customer id
     $payment_intent = \Stripe\PaymentIntent::create([
       "amount" => calculateOrderAmount($body->items),
-      "currency" => $body->currency
+      "currency" => $body->currency,
+      "customer" => $customer->id
     ]);
     
     // Send publishable key and PaymentIntent details to client
@@ -83,11 +87,7 @@ $app->post('/webhook', function(Request $request, Response $response) {
       // The PaymentMethod is attached
       $logger->info('❗ PaymentMethod successfully attached to Customer');
     } else if ($type == 'payment_intent.succeeded') {
-      if($object->setup_future_usage != null) {
-        // You need a Customer to save a card
-        // Create or use a preexisting Customer
-        $customer = \Stripe\Customer::create(["payment_method" => $object->payment_method]);
-      } else {
+      if($object->setup_future_usage = null) {
         $logger->info('❗ Customer did not want to save the card. ');
       }
 
