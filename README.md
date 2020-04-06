@@ -2,7 +2,7 @@
 
 You can save a card to a customer to reuse for a later payment. Stripe ensures the card is properly authenticated before storing to reduce the risk that the cardholder will have to re-authenticate.
 
-To save a card to a customer you need to use `setup_future_usage` and `save_payment_method` parameters.
+To save a card to a customer you need to use the `setup_future_usage` parameter.
 
 When saving a card you will want to consider how you intend to reuse the card for future payments.
 

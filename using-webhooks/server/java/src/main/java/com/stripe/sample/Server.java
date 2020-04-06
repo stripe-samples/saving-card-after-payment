@@ -73,11 +73,18 @@ public class Server {
         post("/create-payment-intent", (request, response) -> {
             response.type("application/json");
 
+            // Create or use a pre-existing Customer to associate with this payment
+            CustomerCreateParams customerCreateParams = new CustomerCreateParams.Builder().build();
+            Customer customer = Customer.create(customerCreateParams);
+
             CreatePaymentBody postBody = gson.fromJson(request.body(), CreatePaymentBody.class);
             PaymentIntentCreateParams createParams = new PaymentIntentCreateParams.Builder()
-                    .setCurrency(postBody.getCurrency()).setAmount(new Long(calculateOrderAmount(postBody.getItems())))
+                    .setCurrency(postBody.getCurrency())
+                    .setAmount(new Long(calculateOrderAmount(postBody.getItems())))
+                    .setCustomer(customer.getId())
                     .build();
-            // Create a PaymentIntent with the order amount and currency
+            
+            // Create a PaymentIntent with the order amount and currency and the customer id
             PaymentIntent intent = PaymentIntent.create(createParams);
             // Send publishable key and PaymentIntent details to client
             return gson.toJson(new CreatePaymentResponse(dotenv.get("STRIPE_PUBLISHABLE_KEY"), intent.getClientSecret(),
@@ -109,13 +116,10 @@ public class Server {
             case "payment_intent.succeeded":
                 PaymentIntent intent = ApiResource.GSON.fromJson(deserializer.getRawJson(), PaymentIntent.class);
 
-                CustomerCreateParams customerCreateParams = new CustomerCreateParams.Builder()
-                        .setPaymentMethod(intent.getPaymentMethod()).build();
-                Customer customer = Customer.create(customerCreateParams);
-
                 // Fulfill any orders, e-mail receipts, etc
                 // To cancel the payment after capture you will need to issue a Refund
                 // (https://stripe.com/docs/api/refunds)
+                
                 System.out.println("💰 Payment received!");
                 break;
             case "payment_intent.payment_failed":

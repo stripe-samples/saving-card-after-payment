@@ -28,10 +28,14 @@ post '/create-payment-intent' do
   content_type 'application/json'
   data = JSON.parse(request.body.read)
 
-  # Create a PaymentIntent with the order amount and currency
+  # Create or use a pre-existing customer to associate with the payment
+  customer = Stripe::Customer.create
+
+  # Create a PaymentIntent with the order amount and currency and the customer id
   payment_intent = Stripe::PaymentIntent.create(
     amount: calculate_order_amount(data['items']),
-    currency: data['currency']
+    currency: data['currency'],
+    customer: customer['id']
   )
 
   # Send publishable key and PaymentIntent details to client
@@ -79,11 +83,7 @@ post '/webhook' do
     # The PaymentMethod is attached
     puts '❗ PaymentMethod successfully attached to Customer'
   elsif event_type == 'payment_intent.succeeded'
-    if !data_object['setup_future_usage'].nil?
-      # You need a Customer to save a card
-      # Create or use a preexisting Customer
-      customer = Stripe::Customer.create(payment_method: data_object['payment_method'])
-    else
+    if data_object['setup_future_usage'].nil?
       puts '❗ Customer did not want to save the card.'
     end
 

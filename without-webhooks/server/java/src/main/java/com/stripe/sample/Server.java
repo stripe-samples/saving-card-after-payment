@@ -160,10 +160,7 @@ public class Server {
                         Customer customer = Customer.create(new CustomerCreateParams.Builder().build());
                         createParams.setCustomer(customer.getId());
                         
-                        // Set save_payment_method to true to attach the PaymentMethod to the Customer
-                        createParams.setSavePaymentMethod(true);
-
-                        // setup_future_usage tells Stripe how you plan on using the saved card
+                        // setup_future_usage saves the card and tells Stripe how you plan to use it later
                         // set to "off_session" if you plan on charging the saved card when your customer is not present
                         createParams.setSetupFutureUsage(PaymentIntentCreateParams.SetupFutureUsage.OFF_SESSION);
                     }

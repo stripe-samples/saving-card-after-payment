@@ -82,8 +82,7 @@ var pay = function(stripe, card, clientSecret) {
   // Initiate the payment.
   // If authentication is required, confirmCardPayment will automatically display a modal
 
-  // Use save_payment_method to indicate that you want to save the card
-  // Use setup_future_usage to tell Stripe how you plan on charging the card
+  // Use setup_future_usage to save the card and tell Stripe how you plan to charge it in the future
   stripe
     .confirmCardPayment(clientSecret, {
       payment_method: data,

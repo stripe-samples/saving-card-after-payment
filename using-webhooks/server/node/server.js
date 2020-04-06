@@ -34,10 +34,14 @@ const calculateOrderAmount = items => {
 app.post("/create-payment-intent", async (req, res) => {
   const { items, currency } = req.body;
 
-  // Create a PaymentIntent with the order amount and currency
+  // Create or use a preexisting Customer to associate with the payment
+  const customer = await stripe.customers.create();
+
+  // Create a PaymentIntent with the order amount and currency and the customer id
   const paymentIntent = await stripe.paymentIntents.create({
     amount: calculateOrderAmount(items),
-    currency: currency
+    currency: currency,
+    customer: customer.id
   });
 
   // Send publishable key and PaymentIntent details to client
@@ -78,13 +82,7 @@ app.post("/webhook", async (req, res) => {
     // The PaymentMethod is attached
     console.log("❗ PaymentMethod successfully attached to Customer");
   } else if (eventType === "payment_intent.succeeded") {
-    if (data.object.setup_future_usage !== null) {
-      // You need a Customer to save a card
-      // Create or use a preexisting Customer
-      const customer = await stripe.customers.create({
-        payment_method: data.object.payment_method
-      });
-    } else {
+    if (data.object.setup_future_usage === null) {
       console.log("❗ Customer did not want to save the card. ");
     }
 
