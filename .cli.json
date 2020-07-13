@@ -5,12 +5,12 @@
     {
       "name": "using-webhooks",
       "clients": ["web"],
-      "servers": ["java", "node", "php", "python", "ruby"]
+      "servers": ["go", "java", "node", "php", "python", "ruby"]
     },
     {
       "name": "without-webhooks",
       "clients": ["web"],
-      "servers": ["java", "node", "php", "python", "ruby"]
+      "servers": ["go", "java", "node", "php", "python", "ruby"]
     }
   ]
 }
