@@ -8,12 +8,12 @@ When saving a card you will want to consider how you intend to reuse the card fo
 
 **👩‍💻 On-session reuse -** Charging the card when your customer is in your application or website, e.g:
 
-* An e-commerce store that lets existing customers pay with a saved card.
+- An e-commerce store that lets existing customers pay with a saved card.
 
-**🖥️ Off-session reuse -** Charging the card when the user is no longer in your app or on your website, e.g: 
+**🖥️ Off-session reuse -** Charging the card when the user is no longer in your app or on your website, e.g:
 
-* A monthly subscription that charges the card on the first of the month.
-* A hotel that charges a deposit before the trip and the full amount after the trip.
+- A monthly subscription that charges the card on the first of the month.
+- A hotel that charges a deposit before the trip and the full amount after the trip.
 
 Setting `setup_future_usage` to "off_session" will optimize for future off-session payments, while "on_session" will optimize for future on-session usage. If you plan on reusing the card for both on and off-session usage, set `setup_future_usage` to "off_session".
 
@@ -29,11 +29,13 @@ Read more about testing on Stripe at https://stripe.com/docs/testing.
 
 <img src="./saving-card-after-payment.gif" alt="A checkout form with a checkbox to let you save a payment method" align="center">
 
-There are two implementations depending on whether you want to use webhooks for any post-payment process: 
-* **[/using-webhooks](/using-webhooks)** Confirms the payment on the client and requires using webhooks or other async event handlers for any post-payment logic (e.g. sending email receipts, fulfilling orders). 
-* **[/without-webhooks](/without-webhooks)** Confirms the payment on the server and allows you to run any post-payment logic right after.
+There are two implementations depending on whether you want to use webhooks for any post-payment process:
+
+- **[/using-webhooks](/using-webhooks)** Confirms the payment on the client and requires using webhooks or other async event handlers for any post-payment logic (e.g. sending email receipts, fulfilling orders).
+- **[/without-webhooks](/without-webhooks)** Confirms the payment on the server and allows you to run any post-payment logic right after.
 
 This sample shows:
+
 <!-- prettier-ignore -->
 |     | Using webhooks | Without webhooks
 :--- | :---: | :---:
@@ -44,13 +46,13 @@ This sample shows:
 
 ## How to run locally
 
-This sample includes 5 server implementations in Node, Ruby, Python, Java, and PHP for the two integration types: [using-webhooks](/using-webhooks) and [without-webhooks](/without-webhooks). 
+This sample includes 6 server implementations in Go, Node, Ruby, Python, Java, and PHP for the two integration types: [using-webhooks](/using-webhooks) and [without-webhooks](/without-webhooks).
 
 Follow the steps below to run locally.
 
 **1. Clone and configure the sample**
 
-The Stripe CLI is the fastest way to clone and configure a sample to run locally. 
+The Stripe CLI is the fastest way to clone and configure a sample to run locally.
 
 **Using the Stripe CLI**
 
@@ -113,10 +115,10 @@ The CLI will print a webhook secret key to the console. Set `STRIPE_WEBHOOK_SECR
 
 You should see events logged in the console where the CLI is running.
 
-When you are ready to create a live webhook endpoint, follow our guide in the docs on [configuring a webhook endpoint in the dashboard](https://stripe.com/docs/webhooks/setup#configure-webhook-settings). 
-
+When you are ready to create a live webhook endpoint, follow our guide in the docs on [configuring a webhook endpoint in the dashboard](https://stripe.com/docs/webhooks/setup#configure-webhook-settings).
 
 ## FAQ
+
 Q: Why did you pick these frameworks?
 
 A: We chose the most minimal framework to convey the key Stripe calls and concepts you need to understand. These demos are meant as an educational tool that helps you roadmap how to integrate Stripe within your own system independent of the framework.
@@ -126,4 +128,5 @@ Q: Can you show me how to build X?
 A: We are always looking for new sample ideas, please email dev-samples@stripe.com with your suggestion!
 
 ## Author(s)
+
 [@adreyfus-stripe](https://twitter.com/adrind)
