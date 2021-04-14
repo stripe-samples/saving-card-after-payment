@@ -1,4 +1,4 @@
-module github.com/stripe-examples/checkout-subscription-and-add-on/server/go
+module github.com/stripe-samples/saving-card-after-payment/server/go
 
 go 1.13
 
