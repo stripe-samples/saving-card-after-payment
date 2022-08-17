@@ -7,7 +7,7 @@ StripeConfiguration.ApiKey = Environment.GetEnvironmentVariable("STRIPE_SECRET_K
 
 StripeConfiguration.AppInfo = new AppInfo
 {
-    Name = "https://github.com/stripe-samples/charging-a-saved-card",
+    Name = "https://github.com/stripe-samples/saving-card-after-payment",
     Url = "https://github.com/stripe-samples",
     Version = "0.1.0",
 };
