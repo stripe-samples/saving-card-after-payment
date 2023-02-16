@@ -10,4 +10,4 @@ python-dotenv==0.10.3
 requests==2.22.0
 stripe==2.29.3
 toml==0.9.6
-Werkzeug==1.0.1
+Werkzeug==2.2.3
